@@ -1,14 +1,8 @@
-"""
-SET keep_going = True
-WHILE keep_going:
-	# do the usual steps: get numbers, operator, display
-	GET again
-	IF again == False:
-		SET keep_going = False
-STOP
-"""
-
 # import pdb
+import json
+import sys
+
+PROMPTS_FILE = 'calculator_prompts.json'
 
 def prompt(message):
     print(f"==> {message}")
@@ -20,40 +14,62 @@ def invalid_number(number_str):
         return True
     return False
 
-# Ask user to select the operation: add, subtract, multiple or divide
-# Ask user the 1st operand
-# Ask user the 2nd operand
-# Print out the result
+# Loading config file. Validations
+# 1) if there is no file, print explanation and exit
+# 2) if the file does not cover all the message scenarios,
+# print explanation and exit
 
-prompt('Welcome to the calculator!')
+try:
+    with open(PROMPTS_FILE, 'r') as f:
+        prompts = json.loads(f.read())
+except FileNotFoundError:
+    print('Prompts configuration file missing. Exiting.')
+    sys.exit()
+
+# Check if all necessary messages were loaded
+# For each message that we need, check if it's inside the loaded config
+messages = [
+    'welcome',
+    'number1',
+    'number2',
+    'invalid_number',
+    'operation',
+    'invalid_operation',
+    'again',
+    ]
+
+if any ([x not in prompts for x in messages]):
+    print('Prompt messages missing in config file. Exiting.')
+    sys.exit()
+
+prompt(prompts['welcome'])
 
 while True:
     # Ask the user for the 1st number
-    prompt("What's the first number?")
+    prompt(prompts['number1'])
     number1 = input()
 
     while invalid_number(number1):
-        prompt("Hmm... that doesn't look like a valid number. Try again.")
+        prompt(prompts['invalid_number'])
         number1 = input()
 
     # Ask the user for the 2nd number
-    prompt("What's the second number?")
+    prompt(prompts['number2'])
     number2 = input()
 
     # pdb.set_trace()
 
     while invalid_number(number2):
-        prompt("Hmm... that doesn't look like a valid number. Try again.")
+        prompt(prompts['invalid_number'])
         number2 = input()
 
     # print(f'Number 1: {number1}\nNumber 2: {number2}')
 
-    prompt("""What operation should we do?
-    1) Add 2) Subtract 3) Multiply 4) Divide""")
+    prompt(prompts['operation'])
     operation = input()
 
     while operation not in ['1', '2', '3', '4']:
-        prompt("You must enter 1, 2, 3 or 4")
+        prompt(prompts['invalid_operation'])
         operation = input()
 
     number1 = int(number1)
@@ -69,9 +85,9 @@ while True:
         case '4':
             result = number1 / number2
 
-    prompt(f'The result is: {result}')
+    prompt(f'The results is {result}')
 
-    prompt('Should we do another calculation? enter Yes to start again.')
+    prompt(prompts['again'])
     again_reply = input()
 
     if again_reply.lower() != 'yes':
