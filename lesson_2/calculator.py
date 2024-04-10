@@ -2,6 +2,7 @@
 
 
 # import pdb
+from copy import copy
 import json
 import sys
 
@@ -12,7 +13,7 @@ def prompt(message):
 
 def invalid_number(number_str):
     try:
-        int(number_str)
+        float(number_str)
     except ValueError:
         return True
     return False
@@ -28,7 +29,7 @@ lang_entered = input()
 while lang_entered not in ['en', 'fr']:
     prompt('Incorrect language. Enter en or fr')
 
-LANG = lang_entered.copy()
+LANG = copy(lang_entered)
 
 try:
     with open(PROMPTS_FILENAME, 'r') as f:
@@ -86,8 +87,8 @@ while True:
         prompt(PROMPTS['invalid_operation'])
         operation = input()
 
-    number1 = int(number1)
-    number2 = int(number2)
+    number1 = float(number1)
+    number2 = float(number2)
 
     match operation:
         case '1':
@@ -99,7 +100,7 @@ while True:
         case '4':
             result = number1 / number2
 
-    prompt(f'The results is {result}')
+    prompt(f'The results is {result:.2f}')
 
     prompt(PROMPTS['again'])
     again_reply = input()
