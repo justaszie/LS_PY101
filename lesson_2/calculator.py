@@ -1,7 +1,3 @@
-# Internationalization:
-
-
-# import pdb
 from copy import copy
 import json
 import sys
@@ -18,11 +14,7 @@ def invalid_number(number_str):
         return True
     return False
 
-# Loading config file. Validations
-# 1) if there is no file, print explanation and exit
-# 2) if the file does not cover all the message scenarios,
-# print explanation and exit
-
+# Allow user to select the language
 prompt('Select language. Enter en for English or fr for French')
 lang_entered = input()
 
@@ -31,6 +23,11 @@ while lang_entered not in ['en', 'fr']:
 
 LANG = copy(lang_entered)
 
+# Load the prompt messages from config file in chosen language
+# Validations
+# 1) if there is no file, print explanation and exit
+# 2) if the file does not cover all the message scenarios,
+# print explanation and exit
 try:
     with open(PROMPTS_FILENAME, 'r') as f:
         PROMPTS = json.load(f)[LANG]
@@ -57,6 +54,7 @@ if any ([x not in PROMPTS for x in message_types]):
     print('Prompt messages missing in config file. Exiting.')
     sys.exit()
 
+# Start calculator program
 prompt(PROMPTS['welcome'])
 
 while True:
