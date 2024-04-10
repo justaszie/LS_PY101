@@ -2,7 +2,7 @@
 import json
 import sys
 
-PROMPTS_FILE = 'calculator_prompts.json'
+PROMPTS_FILENAME = 'calculator_prompts.json'
 
 def prompt(message):
     print(f"==> {message}")
@@ -20,15 +20,15 @@ def invalid_number(number_str):
 # print explanation and exit
 
 try:
-    with open(PROMPTS_FILE, 'r') as f:
-        prompts = json.loads(f.read())
+    with open(PROMPTS_FILENAME, 'r') as f:
+        PROMPTS = json.load(f)
 except FileNotFoundError:
     print('Prompts configuration file missing. Exiting.')
     sys.exit()
 
 # Check if all necessary messages were loaded
 # For each message that we need, check if it's inside the loaded config
-messages = [
+message_types = [
     'welcome',
     'number1',
     'number2',
@@ -38,38 +38,38 @@ messages = [
     'again',
     ]
 
-if any ([x not in prompts for x in messages]):
+if any ([x not in PROMPTS for x in message_types]):
     print('Prompt messages missing in config file. Exiting.')
     sys.exit()
 
-prompt(prompts['welcome'])
+prompt(PROMPTS['welcome'])
 
 while True:
     # Ask the user for the 1st number
-    prompt(prompts['number1'])
+    prompt(PROMPTS['number1'])
     number1 = input()
 
     while invalid_number(number1):
-        prompt(prompts['invalid_number'])
+        prompt(PROMPTS['invalid_number'])
         number1 = input()
 
     # Ask the user for the 2nd number
-    prompt(prompts['number2'])
+    prompt(PROMPTS['number2'])
     number2 = input()
 
     # pdb.set_trace()
 
     while invalid_number(number2):
-        prompt(prompts['invalid_number'])
+        prompt(PROMPTS['invalid_number'])
         number2 = input()
 
     # print(f'Number 1: {number1}\nNumber 2: {number2}')
 
-    prompt(prompts['operation'])
+    prompt(PROMPTS['operation'])
     operation = input()
 
     while operation not in ['1', '2', '3', '4']:
-        prompt(prompts['invalid_operation'])
+        prompt(PROMPTS['invalid_operation'])
         operation = input()
 
     number1 = int(number1)
@@ -87,7 +87,7 @@ while True:
 
     prompt(f'The results is {result}')
 
-    prompt(prompts['again'])
+    prompt(PROMPTS['again'])
     again_reply = input()
 
     if again_reply.lower() != 'yes':
