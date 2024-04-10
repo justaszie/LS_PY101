@@ -1,3 +1,6 @@
+# Internationalization:
+
+
 # import pdb
 import json
 import sys
@@ -19,11 +22,22 @@ def invalid_number(number_str):
 # 2) if the file does not cover all the message scenarios,
 # print explanation and exit
 
+prompt('Select language. Enter en for English or fr for French')
+lang_entered = input()
+
+while lang_entered not in ['en', 'fr']:
+    prompt('Incorrect language. Enter en or fr')
+
+LANG = lang_entered.copy()
+
 try:
     with open(PROMPTS_FILENAME, 'r') as f:
-        PROMPTS = json.load(f)
+        PROMPTS = json.load(f)[LANG]
 except FileNotFoundError:
     print('Prompts configuration file missing. Exiting.')
+    sys.exit()
+except KeyError:
+    print('Language not supported. Exiting.')
     sys.exit()
 
 # Check if all necessary messages were loaded
@@ -90,5 +104,5 @@ while True:
     prompt(PROMPTS['again'])
     again_reply = input()
 
-    if again_reply.lower() != 'yes':
+    if again_reply.lower() not in ['yes', 'oui']:
         break
