@@ -1,4 +1,3 @@
-from copy import copy
 import json
 import sys
 
@@ -20,8 +19,16 @@ lang_entered = input()
 
 while lang_entered not in ['en', 'fr']:
     prompt('Incorrect language. Enter en or fr')
+    lang_entered = input()
 
-LANG = copy(lang_entered)
+# Creating a new object to avoid mut
+LANG = lang_entered
+
+match LANG:
+    case 'en':
+        AGAIN_CONFIRMATION = 'yes'
+    case 'fr':
+        AGAIN_CONFIRMATION = 'oui'
 
 # Load the prompt messages from config file in chosen language
 # Validations
@@ -103,5 +110,5 @@ while True:
     prompt(PROMPTS['again'])
     again_reply = input()
 
-    if again_reply.lower() not in ['yes', 'oui']:
+    if again_reply.lower() != AGAIN_CONFIRMATION:
         break
