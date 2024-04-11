@@ -26,15 +26,15 @@ while True:
     # Getting inputs and making sure they are valid
     loan_amount = input('Enter the loan amount: $')
     while not is_valid_amount(loan_amount):
-        print(f'Invalid amount. Must be higher than {MINIMUM_AMOUNT}. \
-Try again.')
+        print(f'Invalid amount. Must be higher than {MINIMUM_AMOUNT}. '
+              'Try again.')
         loan_amount = input('$')
     loan_amount = float(loan_amount)
 
     apr = input('Enter the annual interest rate percent value (e.g. 2.50): ')
     while not is_valid_apr(apr):
-        print('Invalid APR. It must be either 0 or a positive number. \
-Try again')
+        print('Invalid APR. It must be either 0 or a positive number. '
+              'Try again.')
         apr = input()
     apr = float(apr) / 100
 
