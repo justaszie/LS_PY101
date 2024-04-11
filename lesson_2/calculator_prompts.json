@@ -6,7 +6,9 @@
 		"invalid_number": "Hmm... that doesn't look like a valid number. Try again.",
 		"operation": "What operation should we do?\n1) Add 2) Subtract 3) Multiply 4) Divide",
 		"invalid_operation": "You must enter 1, 2, 3 or 4",
-		"again": "Should we do another calculation? enter Yes to start again."
+		"again": "Should we do another calculation? enter Yes to start again.",
+		"result": "The result:",
+		"goodbye": "k bye!"
 	},
 	"fr":
 	{
@@ -16,6 +18,8 @@
 		"invalid_number": "Ce n'es pas un valide nombre. Entrez un nombre svp",
 		"operation": "Quelle operation faire?\n1) Ajout 2) Soustraction 3) Multiplication 4) Division",
 		"invalid_operation": "Vous devez entrez 1, 2, 3 ou 4",
-		"again": "Voulez-vous faire une autre operation? Tapez oui pour recommencer."
+		"again": "Voulez-vous faire une autre operation? Tapez oui pour recommencer.",
+		"result": "Le resultat:",
+		"goodbye": "Ok, salut!"
 	}
 }
