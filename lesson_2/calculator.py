@@ -55,7 +55,6 @@ def load_prompts(config_filename, language):
 
 # Get a number from user and validate it
 def get_number(prompt_message):
-    # Ask the user for the 1st number
     prompt(prompt_message)
     number = input()
 
@@ -118,7 +117,6 @@ def display_welcome_message():
 
 def display_goodbye_message():
     prompt(PROMPTS['goodbye'])
-
 
 def calculate_again():
     prompt(PROMPTS['again'])
