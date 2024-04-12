@@ -2,7 +2,7 @@
 import random
 import os
 
-MOVES={
+MOVES = {
     'sp': 'spock',
     'sc': 'scissors',
     'r': 'rock',
@@ -13,30 +13,12 @@ MOVES={
 VALID_SELECTIONS = ', '.join([f'"{shortcut}" for {move}'
                         for shortcut, move in MOVES.items()])
 
-# Game rules: mapping the players' selections to the outcomes.
-# Logic: Rock > Scissors, Paper > Rock, Scissors > Paper; Same selection = tie
-# 1 - Player 1 wins, 2 - player 2 wins
-OUTCOMES = {
-    ('lizard', 'rock'): 2,
-    ('lizard', 'paper'): 1,
-    ('lizard', 'scissors'): 2,
-    ('lizard', 'spock'): 1,
-    ('rock', 'lizard'): 1,
-    ('rock', 'paper'): 2,
-    ('rock', 'scissors'): 1,
-    ('rock', 'spock'): 2,
-    ('paper', 'lizard'): 2,
-    ('paper', 'rock'): 1,
-    ('paper', 'scissors'): 2,
-    ('paper', 'spock'): 1,
-    ('scissors', 'lizard'): 1,
-    ('scissors', 'rock'): 2,
-    ('scissors', 'paper'): 1,
-    ('scissors', 'spock'): 2,
-    ('spock', 'lizard'): 2,
-    ('spock', 'rock'): 1,
-    ('spock', 'paper'): 2,
-    ('spock', 'scissors'): 1,
+WINNING_OUTCOMES = {
+    'lizard': ['paper', 'spock'],
+    'rock': ['lizard', 'scissors'],
+    'paper': ['rock', 'spock'],
+    'scissors': ['lizard', 'paper'],
+    'spock': ['rock', 'scissors'],
 }
 
 # Here we can adjust how we display the outcome of the game
@@ -66,20 +48,27 @@ def get_computer_selection():
     return random.choice(list(MOVES.values()))
 
 
-def display_round_summary(user_sel, cpu_sel):
-    prompt(f'User: {user_sel.capitalize()} | Computer: {cpu_sel.capitalize()}')
+def display_round_summary(user_sel, computer_sel):
+    prompt(f'User: {user_sel.capitalize()} |'
+           f' Computer: {computer_sel.capitalize()}')
 
 
-def calculate_round_result(user_sel, cpu_sel):
-    return (0 if user_sel == cpu_sel
-            else OUTCOMES[(user_sel, computer_selection)])
+def calculate_round_result(user_sel, computer_sel):
+    # result code 0 means tie, 1 means user win, 2 means computer win
+    if user_sel == computer_sel:
+        return 0
+
+    return 1 if computer_sel in WINNING_OUTCOMES[user_sel] else 2
+
 
 # Calculate result and display outcome message
 def display_round_result(round_result):
     prompt(ROUND_OUTCOME_MESSAGES[round_result])
 
+
 def display_current_scores(user, computer):
     prompt(f'User Score: {user} | Computer Score: {computer}')
+
 
 def display_grand_winner(user, computer):
     if user > computer:
@@ -88,6 +77,7 @@ def display_grand_winner(user, computer):
     else:
         prompt(f'Computer is the grand winner {computer} - {user}.'
                ' Sorry!')
+
 
 def play_again():
     prompt('Play again? (y/n)')
@@ -108,19 +98,18 @@ def clear_screen():
 
 prompt('Welcome to Rock-Paper-Scissors!')
 
-
-
 while True:
     user_score = 0
     computer_score = 0
 
-    while user_score < 3 and computer_score < 3:
+    while user_score < WINS_LIMIT and computer_score < WINS_LIMIT:
         user_selection = get_user_selection()
         computer_selection = get_computer_selection()
-        
-        result = calculate_round_result(user_selection, computer_selection)
-        
+
         display_round_summary(user_selection, computer_selection)
+
+        result = calculate_round_result(user_selection, computer_selection)
+
         display_round_result(result)
 
         if result == 1:
