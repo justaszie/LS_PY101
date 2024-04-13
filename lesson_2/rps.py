@@ -1,7 +1,7 @@
-# My RPS version before walkthrough
 import random
 import os
 
+# Possible moves with their shortcuts
 MOVES = {
     'sp': 'spock',
     'sc': 'scissors',
@@ -10,9 +10,11 @@ MOVES = {
     'l': 'lizard'
 }
 
+# Text explaining the user what moves they can choose
 VALID_SELECTIONS = ', '.join([f'"{shortcut}" for {move}'
                         for shortcut, move in MOVES.items()])
 
+# Player 1 Selection, mapped to the moves against which the selection wins
 WINNING_OUTCOMES = {
     'lizard': ['paper', 'spock'],
     'rock': ['lizard', 'scissors'],
@@ -49,8 +51,8 @@ def get_computer_selection():
 
 
 def display_round_summary(user_sel, computer_sel):
-    prompt(f'User: {user_sel.capitalize()} |'
-           f' Computer: {computer_sel.capitalize()}')
+    prompt(f'User: {user_sel.capitalize()} | '
+           f'Computer: {computer_sel.capitalize()}')
 
 
 def calculate_round_result(user_sel, computer_sel):

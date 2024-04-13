@@ -1,0 +1,59 @@
+"""
+Inputs:
+- integer x greater than 0 
+- operation code - either s or p 
+
+Output:
+- depending on the chosen operation, the app prints out
+    p: product of a set of integers from 1 to x, inclusive
+    s: sum of a set of integers from 1 to x, inclusive 
+
+Examples:
+
+
+Please enter an integer greater than 0: 6
+Enter "s" to compute the sum, or "p" to compute the product. p
+
+The product of the integers between 1 and 6 is 720.
+
+
+    ex1: 
+        inputs: 4, p
+        output: 24
+
+    ex2:
+        inputs: 5, s
+        output: 15
+
+Requirements:
+    - x value must be a positive integer
+    - operation ode must be either 'p' or 'c'. Otherwise the app won't proceed
+
+    
+Data Structures: 
+- integer for the last value
+- a sequence of numbers from 1 to x inclusive 
+- integer for the result
+
+Algorithm:
+1. get the last_number from user.
+    - validate the number before moving on
+2. get the operation code from user
+    - validate the number before moving on 
+3. if operation code == 'p':
+        result = product of numbers from 1 to last_value, inclusive
+    else: 
+        result = sum of numbers from 1 to last_value, inclusive
+4. Print result. Result should mention either product or sum depending on the operation code.
+"""
+
+
+
+# FURTHER EXPLORATION 
+
+# Instead of last number, we receive a string of numbers separated by a list 
+1. User inputs a string of numbers separated by whitespace
+2. We split the string into list of characters separated as numbers 
+3. We check that each element of the list is a digit. If any of the elements is not string, we ask user to enter the numbers again 
+4. calculate_sum changes to return a sum of a list, passed as argument instead of building a range
+5. calculate_product iterates over a list, passed as an argument instead of iterating over a range 
