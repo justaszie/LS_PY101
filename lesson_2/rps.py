@@ -31,15 +31,46 @@ WINS_LIMIT = 3
 def prompt(message):
     print(f'==> {message}')
 
-def get_user_selection():
-    prompt(f'Select your item: {valid_selections()}')
+
+def display_welcome_message():
+    prompt('Welcome to Rock, Paper, Scissors, Lizard, Spock!')
+    prompt('You are plaing against the computer. '
+           f'First one to win {WINS_LIMIT} rounds is the grand winner\n')
+
+
+def display_rules():
+    prompt("The winner of the round is determined using these rules:")
+    print("""Scissors cuts Paper
+Paper covers Rock
+Rock crushes Lizard
+Lizard poisons Spock
+Spock smashes Scissors
+Scissors decapitates Lizard
+Lizard eats Paper
+Paper disproves Spock
+Spock vaporizes Rock
+Rock crushes Scissors\n""")
+
+
+def get_user_selection(first_round = False):
+    if first_round:
+        selections = valid_selections(include_help = True)
+    else:
+        selections = valid_selections()
+
+    prompt(f'Select your item: {selections}')
     selection = input().lower().strip()
-    while selection not in MOVES:
-        prompt(f'Invalid selection. '
-               f'Choose one: {valid_selections()}')
+    while selection not in MOVES and selection not in MOVES.values():
+        if selection == 'help':
+            display_rules()
+            prompt(f'Select your item: {selections}')
+        else:
+            prompt(f'Invalid selection. '
+                f'Choose one: {selections}')
         selection = input().lower().strip()
 
-    return MOVES[selection]
+    # Depending on user input (shortcut or full name) we fetch the full name
+    return selection if selection in MOVES.values() else MOVES[selection]
 
 
 def get_computer_selection():
@@ -105,22 +136,28 @@ def clear_screen():
         os.system('clear')
 
 
-def valid_selections():
-    return ', '.join([f'"{shortcut}" for {move}'
+def valid_selections(include_help = False):
+    selections =  ', '.join([f'"{shortcut}" for {move}'
                         for shortcut, move in MOVES.items()])
+    if include_help:
+        selections += '\n(type "help" to see the rules)'
+
+    return selections
 
 
-
-def play_rps(wins_limit):
+def play_rps():
     while True:
+        rounds_played = 0
+        
         scoreboard = {
             'user': 0,
             'computer': 0,
         }
 
-        while (scoreboard['user'] < wins_limit
-               and scoreboard['computer'] < wins_limit):
-            user_selection = get_user_selection()
+        while (scoreboard['user'] < WINS_LIMIT
+               and scoreboard['computer'] < WINS_LIMIT):
+            
+            user_selection = get_user_selection(first_round = rounds_played == 0)
             computer_selection = get_computer_selection()
 
             display_round_summary(user_selection, computer_selection)
@@ -133,6 +170,8 @@ def play_rps(wins_limit):
 
             display_current_scores(scoreboard)
 
+            rounds_played += 1
+
         display_grand_winner(scoreboard)
 
         if not play_again():
@@ -141,6 +180,6 @@ def play_rps(wins_limit):
 
         clear_screen()
 
+display_welcome_message()
 
-prompt('Welcome to Rock-Paper-Scissors!')
-play_rps(WINS_LIMIT)
+play_rps()
