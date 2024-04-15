@@ -10,10 +10,6 @@ MOVES = {
     'l': 'lizard'
 }
 
-# Text explaining the user what moves they can choose
-VALID_SELECTIONS = ', '.join([f'"{shortcut}" for {move}'
-                        for shortcut, move in MOVES.items()])
-
 # Player 1 Selection, mapped to the moves against which the selection wins
 WINNING_OUTCOMES = {
     'lizard': ['paper', 'spock'],
@@ -36,11 +32,11 @@ def prompt(message):
     print(f'==> {message}')
 
 def get_user_selection():
-    prompt(f'Select your item: {VALID_SELECTIONS}')
+    prompt(f'Select your item: {valid_selections()}')
     selection = input().lower().strip()
     while selection not in MOVES:
         prompt(f'Invalid selection. '
-               f'Choose one: {VALID_SELECTIONS}')
+               f'Choose one: {valid_selections()}')
         selection = input().lower().strip()
 
     return MOVES[selection]
@@ -55,12 +51,12 @@ def display_round_summary(user_sel, computer_sel):
            f'Computer: {computer_sel.capitalize()}')
 
 
-def calculate_round_result(user_sel, computer_sel):
+def calculate_round_result(user_move, computer_move):
     # result code 0 means tie, 1 means user win, 2 means computer win
-    if user_sel == computer_sel:
+    if user_move == computer_move:
         return 0
 
-    return 1 if computer_sel in WINNING_OUTCOMES[user_sel] else 2
+    return 1 if computer_move in WINNING_OUTCOMES[user_move] else 2
 
 
 # Calculate result and display outcome message
@@ -68,17 +64,28 @@ def display_round_result(round_result):
     prompt(ROUND_OUTCOME_MESSAGES[round_result])
 
 
-def display_current_scores(user, computer):
-    prompt(f'User Score: {user} | Computer Score: {computer}')
+# Update scoreboard after the round
+def update_scoreboard(scores, result_code):
+    if result_code == 1:
+        scores['user'] += 1
+    elif result_code == 2:
+        scores['computer'] += 1
+    # no change to scoreboard in case of a tie (result = 0)
 
 
-def display_grand_winner(user, computer):
-    if user > computer:
-        prompt(f'You are the grand winner {user} - {computer}.'
-               ' Great Job!')
+def display_current_scores(scores):
+    prompt(f'User Score: {scores['user']} |'
+           f'Computer Score: {scores['computer']}')
+
+
+def display_grand_winner(scores):
+    if scores['user'] > scores['computer']:
+        prompt(f'You are the grand winner '
+               f'{scores['user']} - {scores['computer']}. Great Job!')
+
     else:
-        prompt(f'Computer is the grand winner {computer} - {user}.'
-               ' Sorry!')
+        prompt(f'Computer is the grand winner '
+               f'{scores['computer']} - {scores['user']}. Sorry!')
 
 
 def play_again():
@@ -98,33 +105,42 @@ def clear_screen():
         os.system('clear')
 
 
+def valid_selections():
+    return ', '.join([f'"{shortcut}" for {move}'
+                        for shortcut, move in MOVES.items()])
+
+
+
+def play_rps(wins_limit):
+    while True:
+        scoreboard = {
+            'user': 0,
+            'computer': 0,
+        }
+
+        while (scoreboard['user'] < wins_limit
+               and scoreboard['computer'] < wins_limit):
+            user_selection = get_user_selection()
+            computer_selection = get_computer_selection()
+
+            display_round_summary(user_selection, computer_selection)
+
+            result = calculate_round_result(user_selection, computer_selection)
+
+            display_round_result(result)
+
+            update_scoreboard(scoreboard, result)
+
+            display_current_scores(scoreboard)
+
+        display_grand_winner(scoreboard)
+
+        if not play_again():
+            prompt('Goodbye!')
+            break
+
+        clear_screen()
+
+
 prompt('Welcome to Rock-Paper-Scissors!')
-
-while True:
-    user_score = 0
-    computer_score = 0
-
-    while user_score < WINS_LIMIT and computer_score < WINS_LIMIT:
-        user_selection = get_user_selection()
-        computer_selection = get_computer_selection()
-
-        display_round_summary(user_selection, computer_selection)
-
-        result = calculate_round_result(user_selection, computer_selection)
-
-        display_round_result(result)
-
-        if result == 1:
-            user_score += 1
-        elif result == 2:
-            computer_score += 1
-
-        display_current_scores(user_score, computer_score)
-
-    display_grand_winner(user_score, computer_score)
-
-    if not play_again():
-        prompt('Goodbye!')
-        break
-
-    clear_screen()
+play_rps(WINS_LIMIT)
