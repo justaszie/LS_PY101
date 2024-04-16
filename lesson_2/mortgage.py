@@ -79,20 +79,20 @@ def is_valid_duration_years(duration_str):
         return False
 
 
-def calculate_monthly_payment(loan_amount, monthly_interest_rate,
-                              loan_duration):
+def calculate_monthly_payment(amount, monthly_interest_rate,
+                              duration_months):
 
     # Calculating the monthly payment value
     if monthly_interest_rate > 0:
         monthly_payment = (
-            loan_amount *
+            amount *
             (
                 monthly_interest_rate /
-                (1 - (1 + monthly_interest_rate) ** (-loan_duration))
+                (1 - (1 + monthly_interest_rate) ** (-duration_months))
             )
         )
     else:
-        monthly_payment = loan_amount / 12
+        monthly_payment = amount / 12
 
     return monthly_payment
 
@@ -130,14 +130,14 @@ display_welcome_message()
 while True:
     loan_amount = get_loan_amount()
     apr = get_apr()
-    loan_duration = get_loan_duration_months()
+    duration_months = get_loan_duration_months()
 
     # Calculating monthly interest rate if it's non-0
     monthly_interest_rate = apr / 12 if apr > 0 else 0
 
     monthly_payment = calculate_monthly_payment(loan_amount,
                                                 monthly_interest_rate,
-                                                loan_duration)
+                                                duration_months)
     display_monthly_payment(monthly_payment)
 
     if not calculate_again():
