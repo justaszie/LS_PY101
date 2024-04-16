@@ -92,7 +92,7 @@ def calculate_round_result(user_move, computer_move):
 
 # Calculate result and display outcome message
 def display_round_result(round_result):
-    prompt(ROUND_OUTCOME_MESSAGES[round_result])
+    prompt(ROUND_OUTCOME_MESSAGES[round_result] + '\n')
 
 
 # Update scoreboard after the round
@@ -105,18 +105,18 @@ def update_scoreboard(scores, result_code):
 
 
 def display_current_scores(scores):
-    prompt(f'User Score: {scores['user']} |'
-           f'Computer Score: {scores['computer']}')
+    prompt(f'User Score: {scores['user']} | '
+           f'Computer Score: {scores['computer']}\n')
 
 
 def display_grand_winner(scores):
     if scores['user'] > scores['computer']:
         prompt(f'You are the grand winner '
-               f'{scores['user']} - {scores['computer']}. Great Job!')
+               f'{scores['user']} - {scores['computer']}. Great Job!\n')
 
     else:
         prompt(f'Computer is the grand winner '
-               f'{scores['computer']} - {scores['user']}. Sorry!')
+               f'{scores['computer']} - {scores['user']}. Sorry!\n')
 
 
 def play_again():
@@ -148,7 +148,7 @@ def valid_selections(include_help = False):
 def play_rps():
     while True:
         rounds_played = 0
-        
+
         scoreboard = {
             'user': 0,
             'computer': 0,
@@ -156,19 +156,21 @@ def play_rps():
 
         while (scoreboard['user'] < WINS_LIMIT
                and scoreboard['computer'] < WINS_LIMIT):
-            
-            user_selection = get_user_selection(first_round = rounds_played == 0)
-            computer_selection = get_computer_selection()
 
-            display_round_summary(user_selection, computer_selection)
+            user_selection = get_user_selection(rounds_played == 0)
+            computer_selection = get_computer_selection()
 
             result = calculate_round_result(user_selection, computer_selection)
 
-            display_round_result(result)
+            clear_screen()
 
             update_scoreboard(scoreboard, result)
 
             display_current_scores(scoreboard)
+
+            display_round_summary(user_selection, computer_selection)
+
+            display_round_result(result)
 
             rounds_played += 1
 
