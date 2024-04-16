@@ -1,0 +1,40 @@
+Inputs: 
+    list with components of persons name (2 or more elements)
+    dictionary with the keys for title and occupation of a person
+
+Output:
+    string that contains the person's full name and title. 
+    Example: Hello, John Q Doe! Nice to have a Master Plumber around. 
+
+Implicit requirements:
+    Validate that the list contains at least 2 elements, if not, print error message and return None
+    Validate that dictionary contains the title and occupation keys. if not, print error and return None
+
+Example cases:
+    Case 1 : 
+        Inputs: greetings(
+            ["John", "Q", "Doe"],
+            {"title": "Master", "occupation": "Plumber"},
+        ) 
+
+        Output: 
+            Hello, John Q Doe! Nice to have a Master Plumber around. 
+
+Algorithm:
+#Given 2 inputs: list and dictionary
+START
+    if list length < 2:
+        print error
+        return no value
+    else
+        continue
+    if title is not in dictionary keys OR occupation is not in dictionary keys: 
+        print errr 
+        return no value 
+    else 
+        continue
+    (1) join the name list components to create a string with full person's name
+    (2) create a string composed of title and occupation values from the dictionary
+    create a greeting string composed of (1) and (2) sub strings. 
+    return greeting string 
+END
