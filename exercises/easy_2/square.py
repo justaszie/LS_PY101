@@ -1,5 +1,5 @@
 """
-Input: 1 numbers 
+Input: 1 number
 Output: return square value of the number
 
 Requirements
